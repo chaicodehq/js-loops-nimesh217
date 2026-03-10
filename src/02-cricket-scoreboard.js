@@ -31,5 +31,24 @@
  *   // => { totalRuns: 0, totalBalls: 0, wickets: 0, fours: 0, sixes: 0 }
  */
 export function cricketScoreboard(balls) {
-  // Your code here
+  if(!Array.isArray(balls) || balls.length==0){
+    return{totalRuns:0,totalBalls:0,wickets:0,fours:0,sixes:0}
+  }
+  return balls.reduce((score, ball) => {
+    if(score.wickets >= 10){
+      return score;
+    } 
+    score.totalBalls += 1;
+    if(ball === -1){
+      score.wickets += 1;
+    } else {
+      score.totalRuns += ball;
+      if(ball === 4){
+        score.fours += 1;
+      } else if(ball === 6){
+        score.sixes += 1;
+      }
+    }
+    return score;
+  }, { totalRuns: 0, totalBalls: 0, wickets: 0, fours: 0, sixes: 0 });
 }
