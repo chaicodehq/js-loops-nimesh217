@@ -37,5 +37,53 @@
  *   // Sorted: CSK(3), RCB(1), MI(0)
  */
 export function iplPointsTable(matches) {
-  // Your code here
+  if(!Array.isArray(matches) || matches.length === 0) {
+    return [];
+  }
+  let teams = {};
+  for(let match of matches){
+    let team1=match.team1;
+    let team2=match.team2;
+    let result=match.result;
+    if(!teams.hasOwnProperty(team1)){
+      teams[team1]={team: team1, played: 0, won: 0, lost: 0, tied: 0, noResult: 0, points: 0};
+    }
+    if(!teams.hasOwnProperty(team2)){
+      teams[team2]={team: team2, played: 0, won: 0, lost: 0, tied: 0, noResult: 0, points: 0};
+    }
+    teams[team1].played++;
+    teams[team2].played++;
+    if(result==="win"){
+      let winner=match.winner;
+      if(winner===team1){
+        teams[team1].won++;
+        teams[team1].points+=2;
+        teams[team2].lost++;
+      } else if(winner===team2){
+        teams[team2].won++;
+        teams[team2].points+=2;
+        teams[team1].lost++;
+      }
+    } else if(result==="tie"){
+      teams[team1].tied++;
+      teams[team2].tied++;
+      teams[team1].points+=1; 
+      teams[team2].points+=1;
+    }
+    else if(result==="no_result"){
+      teams[team1].noResult++;
+      teams[team2].noResult++;
+      teams[team1].points+=1; 
+      teams[team2].points+=1;
+    } 
+  }
+  let pointsTable=Object.values(teams);
+  pointsTable.sort((a, b) => {
+    if(b.points !== a.points){
+      return b.points - a.points; // Sort by points DESC
+    } else {
+      return a.team.localeCompare(b.team); // Sort by team name ASC
+    }
+  });
+  return pointsTable;
 }
